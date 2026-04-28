@@ -161,10 +161,10 @@ main {
   height: calc(100vh - 132px);
 }
 
-/* Single-column for screens that need it */
+/* Brew lab and your-cup keep the two-column rhythm */
 .screen-brew-lab .screen-inner,
 .screen-your-cup .screen-inner {
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   row-gap: 16px;
 }
 
@@ -276,12 +276,61 @@ strong {
   color: var(--espresso-soft);
 }
 
+.screen-image {
+  width: auto;
+  max-width: 100%;
+  max-height: 64vh;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--cream-dark);
+  box-shadow: 0 8px 24px rgba(43, 26, 18, 0.12);
+}
+
 .origin-video {
   width: auto;
   max-height: 100%;
   object-fit: contain;
   border-radius: 12px;
   background: var(--cream-dark);
+}
+
+.lab-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-self: center;
+}
+
+.methods-image {
+  width: 80%;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--cream-light);
+  box-shadow: 0 6px 18px rgba(43, 26, 18, 0.10);
+}
+
+.your-cup-left {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-self: center;
+  align-items: center;
+  text-align: center;
+}
+
+.your-cup-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: center;
+}
+
+.your-cup-image {
+  width: 80%;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--cream-light);
+  box-shadow: 0 6px 18px rgba(43, 26, 18, 0.10);
 }
 
 /* ============================================
@@ -480,7 +529,8 @@ strong {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28px;
-  margin-top: 8px;
+  margin-top: 0;
+  align-self: center;
 }
 
 .lab-controls {
@@ -778,7 +828,9 @@ strong {
   .screen {
     padding: 50px 6vw 100px;
   }
-  .screen-inner {
+  .screen-inner,
+  .screen-brew-lab .screen-inner,
+  .screen-your-cup .screen-inner {
     grid-template-columns: 1fr;
     gap: 32px;
   }
