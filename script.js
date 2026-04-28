@@ -12,6 +12,7 @@ const currentScreenEl = document.getElementById('currentScreen');
 const totalScreensEl = document.getElementById('totalScreens');
 const backButton = document.getElementById('backButton');
 const nextButton = document.getElementById('nextButton');
+const avatarPip = document.getElementById('avatarPip');
 
 let currentScreen = 1;
 totalScreensEl.textContent = totalScreens;
@@ -30,6 +31,12 @@ function showScreen(n) {
 
   // Trigger screen-specific behavior
   if (n === 2) animateMap();
+
+  if (target && avatarPip) {
+    avatarPip.classList.toggle('visible', target.dataset.narrated === 'true');
+  }
+
+  if (typeof updateNextGate === 'function') updateNextGate();
 }
 
 backButton.addEventListener('click', () => {
@@ -38,16 +45,17 @@ backButton.addEventListener('click', () => {
 
 nextButton.addEventListener('click', () => {
   if (currentScreen < totalScreens) {
+    if (!canAdvance(currentScreen)) return;
     showScreen(currentScreen + 1);
   } else {
     // Finish — restart
-    showScreen(1);
+    restartGame();
   }
 });
 
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowRight' && currentScreen < totalScreens) {
+  if (e.key === 'ArrowRight' && currentScreen < totalScreens && canAdvance(currentScreen)) {
     showScreen(currentScreen + 1);
   } else if (e.key === 'ArrowLeft' && currentScreen > 1) {
     showScreen(currentScreen - 1);
@@ -57,35 +65,196 @@ document.addEventListener('keydown', (e) => {
 // ==========================================
 // KNOWLEDGE CHECKS
 // ==========================================
-const correctResponses = [
-  "Right. The first wave was about scale and convenience — coffee for everyone, everywhere.",
-  "Exactly. Third-wave cafes treat coffee like wine — with attention to origin, varietal, and craft."
-];
+const answeredChecks = new Set();
+const matchingResetters = [];
 
-const incorrectResponses = [
-  "Not quite. The first wave was mass-produced coffee built for shelf life and convenience.",
-  "Not quite. Third-wave coffee is about traceability, light roasts, and showcasing single origins."
-];
+const checkResponses = {
+  '1': {
+    correct: "Right. Coffee was discovered in 9th-century Ethiopia — long before it reached the Americas.",
+    incorrect: "Not quite. Coffee was discovered in Ethiopia, then spread north into Yemen and beyond."
+  },
+  '3': {
+    correct: "Right. The first wave was about scale and convenience — coffee for everyone, everywhere.",
+    incorrect: "Not quite. The first wave was mass-produced coffee built for shelf life and convenience."
+  },
+  '4': {
+    correct: "Exactly. The second wave made espresso drinks mainstream and turned the café into a daily ritual.",
+    incorrect: "Not quite. The second wave was Starbucks, Peet's, and the espresso-based café-as-third-place era."
+  },
+  '5': {
+    correct: "Exactly. Third-wave cafes treat coffee like wine — with attention to origin, varietal, and craft.",
+    incorrect: "Not quite. Third-wave coffee is about traceability, light roasts, and showcasing single origins."
+  }
+};
 
-document.querySelectorAll('.knowledge-check').forEach((check) => {
-  const checkNum = parseInt(check.dataset.check, 10);
+const matchingPairs = {
+  '2': [
+    { term: 'Yemen',  desc: "Where Sufi monks first brewed coffee for late-night devotion" },
+    { term: 'Venice', desc: "Coffee's gateway into Europe via Mediterranean trade" },
+    { term: 'Vienna', desc: "An early hub of European coffeehouse culture" },
+    { term: 'Brazil', desc: "Colonial plantations that turned coffee into a global commodity" }
+  ]
+};
+
+function markAnswered(checkId) {
+  answeredChecks.add(checkId);
+  updateNextGate();
+}
+
+function setupSimpleCheck(check) {
+  const checkId = check.dataset.check;
   const options = check.querySelectorAll('.option');
-  const feedback = document.getElementById(`feedback-${checkNum}`);
+  const feedback = document.getElementById(`feedback-${checkId}`);
+  const responses = checkResponses[checkId];
 
   options.forEach((opt) => {
     opt.addEventListener('click', () => {
+      if (answeredChecks.has(checkId)) return;
       const isCorrect = opt.dataset.correct === 'true';
       options.forEach((o) => {
         o.disabled = true;
         if (o.dataset.correct === 'true') o.classList.add('correct');
       });
       if (!isCorrect) opt.classList.add('incorrect');
-      feedback.textContent = isCorrect
-        ? correctResponses[checkNum - 1]
-        : incorrectResponses[checkNum - 1];
+      feedback.textContent = isCorrect ? responses.correct : responses.incorrect;
+      markAnswered(checkId);
     });
   });
+}
+
+function setupMatchingCheck(check) {
+  const checkId = check.dataset.check;
+  const container = check.querySelector('.check-matching');
+  const feedback = document.getElementById(`feedback-${checkId}`);
+  const pairs = matchingPairs[checkId];
+
+  let selected = null;
+  let matched = 0;
+
+  function shuffleLocal(arr) {
+    return [...arr].sort(() => Math.random() - 0.5);
+  }
+
+  function render() {
+    container.innerHTML = '';
+    const terms = shuffleLocal(pairs.map((p) => ({ type: 'term', value: p.term })));
+    const descs = shuffleLocal(pairs.map((p) => ({ type: 'desc', value: p.desc, term: p.term })));
+    const items = [];
+    for (let i = 0; i < pairs.length; i++) {
+      items.push(terms[i]);
+      items.push(descs[i]);
+    }
+    items.forEach((item) => {
+      const btn = document.createElement('button');
+      btn.className = 'match-item' + (item.type === 'term' ? ' term' : '');
+      btn.textContent = item.value;
+      btn.dataset.type = item.type;
+      btn.dataset.value = item.type === 'term' ? item.value : item.term;
+      btn.addEventListener('click', () => onClick(btn));
+      container.appendChild(btn);
+    });
+  }
+
+  function onClick(btn) {
+    if (btn.classList.contains('matched')) return;
+    if (!selected) {
+      selected = btn;
+      btn.classList.add('selected');
+      return;
+    }
+    if (selected === btn) {
+      btn.classList.remove('selected');
+      selected = null;
+      return;
+    }
+    const a = selected;
+    const b = btn;
+    const isPair = a.dataset.type !== b.dataset.type && a.dataset.value === b.dataset.value;
+    if (isPair) {
+      a.classList.remove('selected');
+      a.classList.add('matched');
+      b.classList.add('matched');
+      matched++;
+      selected = null;
+      if (matched === pairs.length) {
+        feedback.textContent = "Nice. You've traced coffee's path through the old world.";
+        markAnswered(checkId);
+      } else {
+        feedback.textContent = `${matched} of ${pairs.length} matched.`;
+      }
+    } else {
+      a.classList.remove('selected');
+      b.classList.add('selected');
+      setTimeout(() => b.classList.remove('selected'), 400);
+      selected = null;
+      feedback.textContent = 'Not quite — try another pairing.';
+    }
+  }
+
+  matchingResetters.push(() => {
+    matched = 0;
+    selected = null;
+    answeredChecks.delete(checkId);
+    feedback.textContent = '';
+    render();
+  });
+
+  render();
+}
+
+document.querySelectorAll('.knowledge-check').forEach((check) => {
+  if (check.dataset.type === 'matching') {
+    setupMatchingCheck(check);
+  } else {
+    setupSimpleCheck(check);
+  }
 });
+
+// ==========================================
+// NAVIGATION GATING
+// ==========================================
+const navHint = document.getElementById('navHint');
+
+function getChecksOnScreen(n) {
+  const screen = document.querySelector(`.screen[data-screen="${n}"]`);
+  if (!screen) return [];
+  return Array.from(screen.querySelectorAll('.knowledge-check'));
+}
+
+function canAdvance(n) {
+  return getChecksOnScreen(n).every((c) => answeredChecks.has(c.dataset.check));
+}
+
+function updateNextGate() {
+  if (currentScreen === totalScreens) {
+    nextButton.disabled = false;
+    navHint.textContent = '';
+    return;
+  }
+  const blocked = !canAdvance(currentScreen);
+  nextButton.disabled = blocked;
+  navHint.textContent = blocked ? 'Answer the question to continue' : '';
+}
+
+function restartGame() {
+  answeredChecks.clear();
+  document.querySelectorAll('.option').forEach((o) => {
+    o.disabled = false;
+    o.classList.remove('correct', 'incorrect');
+  });
+  document.querySelectorAll('.check-feedback').forEach((f) => (f.textContent = ''));
+  matchingResetters.forEach((fn) => fn());
+  matchedCount = 0;
+  renderMatchGame();
+  showScreen(1);
+}
+
+updateNextGate();
+
+const initialScreen = document.querySelector('.screen.active');
+if (initialScreen && avatarPip) {
+  avatarPip.classList.toggle('visible', initialScreen.dataset.narrated === 'true');
+}
 
 // ==========================================
 // MAP ANIMATION (Screen 2)
@@ -307,14 +476,4 @@ function handleMatchClick(btn) {
 renderMatchGame();
 
 // Restart button
-document.getElementById('restartButton')?.addEventListener('click', () => {
-  // Reset game state
-  document.querySelectorAll('.option').forEach((o) => {
-    o.disabled = false;
-    o.classList.remove('correct', 'incorrect');
-  });
-  document.querySelectorAll('.check-feedback').forEach((f) => f.textContent = '');
-  matchedCount = 0;
-  renderMatchGame();
-  showScreen(1);
-});
+document.getElementById('restartButton')?.addEventListener('click', restartGame);

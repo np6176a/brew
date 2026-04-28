@@ -24,26 +24,29 @@
   <main id="game">
 
     <!-- ========== SCREEN 1: ORIGIN ========== -->
-    <section class="screen active" data-screen="1">
+    <section class="screen active" data-screen="1" data-narrated="true">
       <div class="screen-inner screen-origin">
-        <div class="content-block">
-          <p class="eyebrow">Chapter one</p>
-          <h1 class="display">A goat herder, a discovery</h1>
-          <p class="lede">
-            The story begins in the highlands of Ethiopia, sometime in the 9th century.
-          </p>
-          <p class="body">
-            A goat herder named Kaldi noticed his goats dancing — strangely energetic
-            after eating bright red berries from a nearby shrub. Curious, he tried them
-            himself. Local monks soon followed, brewing the berries into a drink that
-            kept them awake through long nights of prayer.
-          </p>
-          <p class="body">
-            That shrub was <em>Coffea arabica</em>. That drink was the first cup of coffee.
-          </p>
-          <p class="body small muted">
-            Press <strong>Next</strong> to follow coffee out of Ethiopia and into the world.
-          </p>
+        <div class="left-stack">
+          <div class="content-block">
+            <p class="eyebrow">Chapter one</p>
+            <h1 class="display">A goat herder, a discovery</h1>
+            <p class="helper-text">Ethiopia · 9th century · <em>Coffea arabica</em></p>
+            <p class="body">
+              A goat herder named Kaldi noticed his goats dancing after eating bright
+              red berries from a wild shrub. Local monks brewed them into a drink that
+              kept them awake through long nights of prayer — the first cup of coffee.
+            </p>
+          </div>
+
+          <!-- Knowledge Check 1 — True/False -->
+          <div class="knowledge-check" data-check="1" data-type="tf">
+            <p class="check-question">True or false: coffee was first discovered in South America.</p>
+            <div class="check-options tf-options">
+              <button class="option" data-correct="false">True</button>
+              <button class="option" data-correct="true">False</button>
+            </div>
+            <div class="check-feedback" id="feedback-1"></div>
+          </div>
         </div>
         <div class="illustration-block">
           <div class="image-placeholder" data-image="01-origin">
@@ -54,22 +57,18 @@
     </section>
 
     <!-- ========== SCREEN 2: THE SPREAD ========== -->
-    <section class="screen" data-screen="2">
+    <section class="screen" data-screen="2" data-narrated="true">
       <div class="screen-inner screen-spread">
         <div class="content-block">
           <p class="eyebrow">Chapter two</p>
           <h1 class="display">Coffee finds the world</h1>
+          <p class="helper-text">From Ethiopia to the Americas — by way of the great trade routes.</p>
           <p class="body">
-            From Ethiopia, coffee crossed the Red Sea to Yemen, where Sufi monks brewed
-            it for late-night devotion. From there, it spread along trade routes —
-            Mecca, Cairo, Istanbul, Venice, Vienna, Amsterdam, and eventually the
-            colonial plantations of the Americas.
+            Coffee crossed the Red Sea to Yemen, where Sufi mystics brewed it for
+            late-night devotion. From there it spread through Cairo, Istanbul, and into
+            Europe — and by the 1700s, coffeehouses were called <em>"penny universities"</em>.
           </p>
-          <p class="body">
-            By the 1700s, coffeehouses were the intellectual engines of Europe. They
-            were called "penny universities" — for the price of a cup, you could sit
-            among writers, philosophers, and merchants for hours.
-          </p>
+          <p class="helper-text-sub">Yemen · Istanbul · Venice · Vienna · Amsterdam</p>
         </div>
         <div class="map-block">
           <div class="map-container" id="map">
@@ -109,34 +108,36 @@
           </div>
           <button class="ghost-button" id="replayMap">Replay journey</button>
         </div>
+
+        <!-- Knowledge Check 2 — Matching -->
+        <div class="knowledge-check full-row" data-check="2" data-type="matching">
+          <p class="check-question">Match each place to its role in coffee's spread.</p>
+          <div class="check-matching" id="matching-2"></div>
+          <div class="check-feedback" id="feedback-2"></div>
+        </div>
       </div>
     </section>
 
     <!-- ========== SCREEN 3: FIRST WAVE ========== -->
-    <section class="screen" data-screen="3">
+    <section class="screen" data-screen="3" data-narrated="true">
       <div class="screen-inner screen-first-wave">
         <div class="content-block">
           <p class="eyebrow">Chapter three · The first wave</p>
           <h1 class="display">Coffee in every cupboard</h1>
+          <p class="helper-text">1800s — 1950s</p>
           <p class="body">
-            The first wave runs roughly from the late 1800s through the mid-20th century.
-            This was coffee as a <em>commodity</em> — Folgers, Maxwell House, Nescafé.
-            Vacuum-sealed cans on grocery shelves. Instant crystals you could spoon into
-            hot water.
+            Industrial roasting and vacuum-sealing turn coffee into a packaged good. By
+            the post-war boom, tin cans and instant crystals are fixtures of every
+            American kitchen, office, and diner — built for scale, shelf life, and
+            consistency. Coffee is <em>everywhere</em> and <em>daily fuel</em>:
+            ubiquitous, dependable, never the point.
           </p>
-          <p class="body">
-            The goal was scale, shelf life, and consistency. Quality and origin? Mostly
-            an afterthought. Coffee was a daily fuel, not a craft. But it became
-            ubiquitous — a fixture of American kitchens and offices.
-          </p>
-          <p class="body small muted">
-            <strong>Defining values:</strong> convenience, consistency, accessibility.
-          </p>
+          <p class="helper-text-sub">Convenience · Consistency · Scale</p>
+          <p class="helper-text-brands">Folgers &middot; Maxwell House &middot; Nescafé</p>
         </div>
 
-        <!-- Knowledge Check 1 -->
-        <div class="knowledge-check" data-check="1">
-          <p class="check-label">Knowledge check</p>
+        <!-- Knowledge Check 3 — MCQ -->
+        <div class="knowledge-check" data-check="3" data-type="mcq">
           <p class="check-question">What best describes the first wave of coffee?</p>
           <div class="check-options">
             <button class="option" data-correct="false">Single-origin beans roasted by small craft roasters</button>
@@ -144,35 +145,42 @@
             <button class="option" data-correct="false">Espresso-based drinks served in coffeehouse chains</button>
             <button class="option" data-correct="false">Direct-trade beans with traceable farm origins</button>
           </div>
-          <div class="check-feedback" id="feedback-1"></div>
+          <div class="check-feedback" id="feedback-3"></div>
         </div>
       </div>
     </section>
 
     <!-- ========== SCREEN 4: SECOND WAVE ========== -->
-    <section class="screen" data-screen="4">
+    <section class="screen" data-screen="4" data-narrated="true">
       <div class="screen-inner screen-second-wave">
-        <div class="content-block">
-          <p class="eyebrow">Chapter four · The second wave</p>
-          <h1 class="display">Coffee becomes an experience</h1>
-          <p class="body">
-            Starting in the 1970s and exploding through the 80s and 90s, the second
-            wave was about <em>experience</em>. Peet's in Berkeley. Starbucks in Seattle.
-            Suddenly coffee wasn't just fuel — it was an outing. A vocabulary. A lifestyle.
-          </p>
-          <p class="body">
-            Espresso drinks went mainstream. Lattes, cappuccinos, mochas, frappuccinos.
-            People started naming their drinks like cocktails. The café became a
-            "third place" — not home, not work, somewhere in between.
-          </p>
-          <p class="body">
-            Origin still mattered less than the ritual and the brand. But for the first
-            time, millions of people were paying premium prices for a cup of coffee —
-            and they wanted to know what dark roast tasted like.
-          </p>
-          <p class="body small muted">
-            <strong>Defining values:</strong> ritual, branding, dark roast, the café as destination.
-          </p>
+        <div class="left-stack">
+          <div class="content-block">
+            <p class="eyebrow">Chapter four · The second wave</p>
+            <h1 class="display">Coffee becomes an experience</h1>
+            <p class="helper-text">1970s — 1990s</p>
+            <p class="body">
+              A backlash against bland supermarket coffee. Specialty roasters in
+              <em>Berkeley</em> (Peet's, 1966) and <em>Seattle</em> (Starbucks, 1971)
+              introduce espresso drinks and a vocabulary to match — lattes, cappuccinos,
+              mochas, ordered like cocktails. The café becomes a <em>"third place"</em>
+              between home and work, and coffee becomes a lifestyle defined by ritual,
+              branding, and dark roast.
+            </p>
+            <p class="helper-text-sub">Latte · Cappuccino · Mocha · "Third place"</p>
+            <p class="helper-text-brands">Peet's &middot; Starbucks</p>
+          </div>
+
+          <!-- Knowledge Check 4 — MCQ -->
+          <div class="knowledge-check" data-check="4" data-type="mcq">
+            <p class="check-question">Which best captures the second wave of coffee?</p>
+            <div class="check-options">
+              <button class="option" data-correct="false">Single-origin beans with terroir-focused tasting notes</button>
+              <button class="option" data-correct="false">Vacuum-sealed cans of pre-ground coffee for the kitchen</button>
+              <button class="option" data-correct="true">Espresso drinks and the café as a "third place" destination</button>
+              <button class="option" data-correct="false">Direct-trade relationships with named farmers</button>
+            </div>
+            <div class="check-feedback" id="feedback-4"></div>
+          </div>
         </div>
         <div class="illustration-block">
           <div class="image-placeholder" data-image="04-second-wave">
@@ -183,31 +191,27 @@
     </section>
 
     <!-- ========== SCREEN 5: THIRD WAVE ========== -->
-    <section class="screen" data-screen="5">
+    <section class="screen" data-screen="5" data-narrated="true">
       <div class="screen-inner screen-third-wave">
         <div class="content-block">
           <p class="eyebrow">Chapter five · The third wave</p>
           <h1 class="display">Coffee as craft</h1>
+          <p class="helper-text">2000s — today</p>
           <p class="body">
-            The third wave began in the early 2000s and is where we are now. Roasters
-            like Stumptown, Intelligentsia, and Counter Culture started treating coffee
-            the way wine has been treated for centuries — with attention to <em>origin,
-            farmer, varietal, and process</em>.
+            Roasters like <em>Stumptown</em> (Portland), <em>Intelligentsia</em>
+            (Chicago), and <em>Counter Culture</em> (Durham) treat coffee like wine —
+            with attention to <em>origin, farmer, varietal, and process</em>. Light
+            roasts replace dark to preserve the bean's character. Single-origin replaces
+            blends, and bags now read like tasting menus: farm name, elevation,
+            processing method, and flavor notes — blueberry, jasmine, stone fruit.
+            Direct-trade relationships put the farmer back on the label.
           </p>
-          <p class="body">
-            Light roasts replaced dark. Single-origin replaced blends. Pour-overs and
-            AeroPresses replaced auto-drip. Baristas became craftspeople. A bag of
-            coffee started telling you the farm name, the elevation, the processing
-            method, and the tasting notes — blueberry, jasmine, stone fruit.
-          </p>
-          <p class="body small muted">
-            <strong>Defining values:</strong> traceability, transparency, craft, terroir, lighter roasts.
-          </p>
+          <p class="helper-text-sub">Origin · Farmer · Process · Terroir</p>
+          <p class="helper-text-brands">Stumptown &middot; Intelligentsia &middot; Counter Culture</p>
         </div>
 
-        <!-- Knowledge Check 2 -->
-        <div class="knowledge-check" data-check="2">
-          <p class="check-label">Knowledge check</p>
+        <!-- Knowledge Check 5 — MCQ -->
+        <div class="knowledge-check" data-check="5" data-type="mcq">
           <p class="check-question">Which of these would you most likely find in a third-wave café?</p>
           <div class="check-options">
             <button class="option" data-correct="false">A can of pre-ground dark roast on a grocery shelf</button>
@@ -215,7 +219,7 @@
             <button class="option" data-correct="true">A pour-over of a single-origin Ethiopian Yirgacheffe with tasting notes on the bag</button>
             <button class="option" data-correct="false">An instant coffee packet labeled "100% pure"</button>
           </div>
-          <div class="check-feedback" id="feedback-2"></div>
+          <div class="check-feedback" id="feedback-5"></div>
         </div>
       </div>
     </section>
@@ -309,11 +313,6 @@
         <div class="content-block">
           <p class="eyebrow">Chapter seven · Your cup</p>
           <h1 class="display">You've completed the journey</h1>
-          <p class="body">
-            From a goat herder in 9th-century Ethiopia to a third-wave pour-over bar —
-            you now know how coffee got here, what shaped it, and how to think about
-            the cup in front of you.
-          </p>
         </div>
 
         <div class="tasting-game">
@@ -325,10 +324,6 @@
         </div>
 
         <div class="content-block finale">
-          <p class="body">
-            You're ready to walk into any café, read a bag, ask a smart question, and
-            order with intention. That's the goal. Not snobbery — fluency.
-          </p>
           <p class="body finale-line">Now go drink something good.</p>
           <button class="primary-button" id="restartButton">Start again</button>
         </div>
@@ -337,10 +332,21 @@
 
   </main>
 
+  <!-- Avatar picture-in-picture (HeyGen narration on slides 1–5) -->
+  <aside class="avatar-pip" id="avatarPip" aria-label="HeyGen avatar narration placeholder">
+    <div class="avatar-pip-frame">
+      <span class="avatar-pip-text">Avatar</span>
+      <span class="avatar-pip-sub">HeyGen narration</span>
+    </div>
+  </aside>
+
   <!-- Navigation -->
   <nav class="nav">
-    <button class="nav-button" id="backButton" disabled>← Back</button>
-    <button class="nav-button primary" id="nextButton">Next →</button>
+    <p class="nav-hint" id="navHint"></p>
+    <div class="nav-buttons">
+      <button class="nav-button" id="backButton" disabled>← Back</button>
+      <button class="nav-button primary" id="nextButton">Next →</button>
+    </div>
   </nav>
 
   <script src="script.js"></script>
