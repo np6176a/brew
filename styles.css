@@ -276,6 +276,14 @@ strong {
   color: var(--espresso-soft);
 }
 
+.origin-video {
+  width: auto;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--cream-dark);
+}
+
 /* ============================================
    MAP (Screen 2)
    ============================================ */
