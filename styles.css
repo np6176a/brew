@@ -1,0 +1,662 @@
+/* ============================================
+   BREW — Stylesheet
+   Warm, cozy, hand-drawn editorial feel
+   ============================================ */
+
+:root {
+  /* Palette */
+  --cream: #F5EFE4;
+  --cream-light: #FAF6EE;
+  --cream-dark: #ECE3D2;
+  --espresso: #3B2418;
+  --espresso-soft: #5C3B2A;
+  --crema: #C89968;
+  --crema-light: #E0B987;
+  --terracotta: #B5552E;
+  --sage: #7A8B6E;
+  --ink: #2A1A12;
+  --ink-muted: #6B5544;
+  --paper: #FAF6EE;
+
+  /* Type */
+  --display: 'Fraunces', Georgia, serif;
+  --body: 'Fraunces', Georgia, serif;
+  --hand: 'Caveat', cursive;
+  --ui: 'Inter', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--cream-dark);
+  z-index: 100;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--espresso);
+  width: 14%; /* 1/7 starting */
+  transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.screen-counter {
+  position: fixed;
+  top: 20px;
+  right: 28px;
+  font-family: var(--ui);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  z-index: 100;
+}
+
+/* ============================================
+   SCREEN LAYOUT
+   ============================================ */
+main {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.7s ease;
+  overflow-y: auto;
+  padding: 60px 8vw 100px;
+}
+
+.screen.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.screen-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  min-height: calc(100vh - 160px);
+}
+
+/* Single-column for screens that need it */
+.screen-brew-lab .screen-inner,
+.screen-your-cup .screen-inner {
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+.eyebrow {
+  font-family: var(--hand);
+  font-size: 22px;
+  color: var(--terracotta);
+  margin-bottom: 12px;
+  letter-spacing: 0.01em;
+}
+
+.display {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--espresso);
+  margin-bottom: 24px;
+}
+
+.lede {
+  font-family: var(--display);
+  font-size: 22px;
+  font-style: italic;
+  color: var(--espresso-soft);
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.body {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.body.small {
+  font-size: 15px;
+}
+
+.body.muted {
+  color: var(--ink-muted);
+}
+
+em {
+  font-style: italic;
+  color: var(--espresso);
+}
+
+strong {
+  font-weight: 600;
+  color: var(--espresso);
+}
+
+/* ============================================
+   ILLUSTRATION BLOCKS
+   ============================================ */
+.illustration-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-placeholder {
+  width: 100%;
+  aspect-ratio: 4/5;
+  background: var(--cream-dark);
+  border: 2px dashed var(--crema);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  font-family: var(--hand);
+  font-size: 18px;
+  color: var(--espresso-soft);
+}
+
+/* ============================================
+   MAP (Screen 2)
+   ============================================ */
+.map-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.map-container {
+  width: 100%;
+  aspect-ratio: 3/2;
+  background: var(--cream-light);
+  border-radius: 12px;
+  border: 1px solid var(--cream-dark);
+  position: relative;
+  padding: 20px;
+  overflow: hidden;
+}
+
+#mapSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.continent {
+  fill: var(--cream-dark);
+  stroke: var(--crema);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 3;
+}
+
+.journey-path {
+  fill: none;
+  stroke: var(--terracotta);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 4 4;
+  stroke-dashoffset: 800;
+  /* Animation triggered by JS */
+}
+
+.journey-path.animate {
+  animation: drawPath 6s ease forwards;
+}
+
+@keyframes drawPath {
+  to { stroke-dashoffset: 0; }
+}
+
+.stop circle {
+  fill: var(--espresso);
+  opacity: 0;
+  transform-origin: center;
+}
+
+.stop.show circle {
+  animation: popIn 0.4s ease forwards;
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0); }
+  60% { transform: scale(1.4); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.map-label {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--hand);
+  font-size: 24px;
+  color: var(--terracotta);
+  background: var(--cream-light);
+  padding: 4px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--crema);
+}
+
+/* ============================================
+   KNOWLEDGE CHECKS
+   ============================================ */
+.knowledge-check {
+  background: var(--cream-light);
+  border: 1px solid var(--cream-dark);
+  border-radius: 12px;
+  padding: 28px;
+  margin-top: 16px;
+}
+
+.check-label {
+  font-family: var(--hand);
+  font-size: 20px;
+  color: var(--terracotta);
+  margin-bottom: 8px;
+}
+
+.check-question {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--espresso);
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.check-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option {
+  background: var(--paper);
+  border: 1px solid var(--cream-dark);
+  border-radius: 8px;
+  padding: 14px 18px;
+  text-align: left;
+  font-family: var(--body);
+  font-size: 16px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--crema);
+  background: var(--cream);
+}
+
+.option.correct {
+  background: #E8EFE0;
+  border-color: var(--sage);
+  color: var(--espresso);
+}
+
+.option.incorrect {
+  background: #F5E1D7;
+  border-color: var(--terracotta);
+  color: var(--espresso);
+}
+
+.option:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.option.correct:disabled,
+.option.incorrect:disabled {
+  opacity: 1;
+}
+
+.check-feedback {
+  margin-top: 16px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--espresso-soft);
+  min-height: 24px;
+}
+
+/* ============================================
+   BREW LAB
+   ============================================ */
+.brew-lab {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 24px;
+}
+
+.lab-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.lab-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lab-row label {
+  font-family: var(--hand);
+  font-size: 22px;
+  color: var(--espresso);
+}
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  background: transparent;
+  border: 1px solid var(--crema);
+  border-radius: 24px;
+  padding: 8px 16px;
+  font-family: var(--ui);
+  font-size: 14px;
+  color: var(--espresso-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip:hover {
+  background: var(--cream-light);
+}
+
+.chip.active {
+  background: var(--espresso);
+  color: var(--cream-light);
+  border-color: var(--espresso);
+}
+
+.lab-result {
+  background: var(--cream-light);
+  border: 1px solid var(--cream-dark);
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.result-label {
+  font-family: var(--hand);
+  font-size: 20px;
+  color: var(--terracotta);
+  margin-bottom: 6px;
+}
+
+.result-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 32px;
+  color: var(--espresso);
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+.result-desc {
+  font-size: 16px;
+  margin-bottom: 24px;
+  color: var(--ink);
+  min-height: 96px;
+}
+
+.result-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.bar-label {
+  font-family: var(--ui);
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.bar {
+  height: 8px;
+  background: var(--cream-dark);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--crema);
+  transition: width 0.5s ease;
+}
+
+/* ============================================
+   TASTING GAME (Screen 7)
+   ============================================ */
+.tasting-game {
+  background: var(--cream-light);
+  border: 1px solid var(--cream-dark);
+  border-radius: 12px;
+  padding: 32px;
+  margin: 24px 0;
+}
+
+.game-label {
+  font-family: var(--hand);
+  font-size: 22px;
+  color: var(--terracotta);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.match-item {
+  background: var(--paper);
+  border: 1px solid var(--cream-dark);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.match-item:hover {
+  border-color: var(--crema);
+}
+
+.match-item.selected {
+  background: var(--espresso);
+  color: var(--cream-light);
+  border-color: var(--espresso);
+}
+
+.match-item.matched {
+  background: #E8EFE0;
+  border-color: var(--sage);
+  color: var(--espresso);
+  cursor: default;
+  opacity: 0.85;
+}
+
+.match-item.term {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.match-feedback {
+  text-align: center;
+  margin-top: 20px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--espresso-soft);
+  min-height: 24px;
+}
+
+.finale {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.finale-line {
+  font-family: var(--hand);
+  font-size: 32px;
+  color: var(--terracotta);
+  margin: 24px 0;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+.nav {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 100;
+}
+
+.nav-button {
+  background: var(--paper);
+  border: 1px solid var(--crema);
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-family: var(--ui);
+  font-size: 14px;
+  color: var(--espresso);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: var(--cream);
+  border-color: var(--espresso);
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.nav-button.primary {
+  background: var(--espresso);
+  color: var(--cream-light);
+  border-color: var(--espresso);
+}
+
+.nav-button.primary:hover {
+  background: var(--ink);
+}
+
+.ghost-button {
+  background: transparent;
+  border: 1px solid var(--crema);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-family: var(--ui);
+  font-size: 13px;
+  color: var(--espresso-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ghost-button:hover {
+  background: var(--cream-light);
+}
+
+.primary-button {
+  background: var(--espresso);
+  color: var(--cream-light);
+  border: none;
+  border-radius: 24px;
+  padding: 14px 28px;
+  font-family: var(--ui);
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: all 0.2s ease;
+}
+
+.primary-button:hover {
+  background: var(--ink);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 800px) {
+  .screen {
+    padding: 50px 6vw 100px;
+  }
+  .screen-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .brew-lab {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .match-grid {
+    grid-template-columns: 1fr;
+  }
+  .display {
+    font-size: 36px;
+  }
+}
