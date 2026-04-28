@@ -78,39 +78,32 @@
         </div>
         <div class="map-block">
           <div class="map-container" id="map">
-            <svg viewBox="0 0 600 400" id="mapSvg" xmlns="http://www.w3.org/2000/svg">
-              <!-- Stylized hand-drawn world map placeholder -->
-              <rect width="600" height="400" fill="transparent"/>
-              <!-- Continents: rough hand-drawn blobs -->
-              <path d="M80,140 Q120,110 180,130 Q220,150 200,200 Q160,230 110,210 Q70,180 80,140 Z"
-                    class="continent" />
-              <path d="M260,180 Q310,160 340,200 Q330,250 290,260 Q250,240 260,180 Z"
-                    class="continent" />
-              <path d="M280,90 Q360,80 410,110 Q450,140 430,180 Q380,200 320,180 Q260,150 280,90 Z"
-                    class="continent" />
-              <path d="M450,150 Q500,140 530,170 Q540,210 510,240 Q470,250 450,210 Q440,180 450,150 Z"
-                    class="continent" />
+            <svg viewBox="0 0 600 400" id="mapSvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+              <!-- Hand-drawn world map artwork (raster) -->
+              <image href="assets/map.png" x="0" y="0" width="600" height="400" preserveAspectRatio="xMidYMid meet" />
 
-              <!-- Animated path of coffee's journey -->
+              <!-- Animated path of coffee's journey: Ethiopia → Yemen → Istanbul → Venice → Amsterdam → Americas → South America -->
               <path id="journeyPath"
-                    d="M310,200 Q330,180 360,170 Q400,160 410,180 Q430,160 450,150 Q420,130 380,120 Q330,110 290,130 Q230,160 180,180"
+                    d="M365,270 Q382,248 390,220 Q375,205 350,190 Q325,180 300,170 Q295,158 285,145 Q210,140 130,150 Q150,225 165,288"
                     class="journey-path" />
 
               <!-- Stops -->
-              <g class="stop" data-label="Ethiopia"
-                 transform="translate(310,200)"><circle r="6"/></g>
-              <g class="stop" data-label="Yemen"
-                 transform="translate(360,170)"><circle r="6"/></g>
-              <g class="stop" data-label="Istanbul"
-                 transform="translate(410,150)"><circle r="6"/></g>
-              <g class="stop" data-label="Venice"
-                 transform="translate(370,120)"><circle r="6"/></g>
-              <g class="stop" data-label="Amsterdam"
-                 transform="translate(310,100)"><circle r="6"/></g>
-              <g class="stop" data-label="Americas"
-                 transform="translate(180,180)"><circle r="6"/></g>
+              <g class="stop" data-label="Ethiopia · ~800 CE"
+                 transform="translate(365,270)"><circle r="7"/></g>
+              <g class="stop" data-label="Yemen · 1430s"
+                 transform="translate(390,220)"><circle r="7"/></g>
+              <g class="stop" data-label="Istanbul · 1550s"
+                 transform="translate(350,190)"><circle r="7"/></g>
+              <g class="stop" data-label="Venice · 1615"
+                 transform="translate(300,170)"><circle r="7"/></g>
+              <g class="stop" data-label="Amsterdam · 1660s"
+                 transform="translate(285,145)"><circle r="7"/></g>
+              <g class="stop" data-label="To the Americas · 1650s"
+                 transform="translate(130,150)"><circle r="7"/></g>
+              <g class="stop" data-label="South America · 1720s"
+                 transform="translate(165,288)"><circle r="7"/></g>
             </svg>
-            <div class="map-label" id="mapLabel">Ethiopia</div>
+            <div class="map-label" id="mapLabel">Ethiopia · ~800 CE</div>
           </div>
           <button class="ghost-button" id="replayMap">Replay journey</button>
         </div>

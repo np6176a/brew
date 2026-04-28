@@ -259,27 +259,70 @@ if (initialScreen && avatarPip) {
 // ==========================================
 // MAP ANIMATION (Screen 2)
 // ==========================================
+// Find the path-length value where (x, y) lies, by sampling.
+function lengthAtPoint(path, x, y, total) {
+  const STEPS = 600;
+  let bestL = 0;
+  let bestD = Infinity;
+  for (let i = 0; i <= STEPS; i++) {
+    const L = (i / STEPS) * total;
+    const p = path.getPointAtLength(L);
+    const dx = p.x - x;
+    const dy = p.y - y;
+    const d = dx * dx + dy * dy;
+    if (d < bestD) {
+      bestD = d;
+      bestL = L;
+    }
+  }
+  return bestL;
+}
+
 function animateMap() {
   const path = document.getElementById('journeyPath');
-  const stops = document.querySelectorAll('.stop');
+  const stops = Array.from(document.querySelectorAll('.stop'));
   const label = document.getElementById('mapLabel');
-  if (!path) return;
+  if (!path || stops.length === 0) return;
 
-  // Reset
-  path.classList.remove('animate');
-  stops.forEach((s) => s.classList.remove('show'));
-  void path.offsetWidth; // reflow
+  const total = path.getTotalLength();
+  if (!total) return;
 
-  // Animate path
-  path.classList.add('animate');
-
-  // Pop stops in sequence with labels
-  stops.forEach((stop, i) => {
-    setTimeout(() => {
-      stop.classList.add('show');
-      label.textContent = stop.dataset.label;
-    }, i * 1000);
+  // For each dot, find how far along the path it sits.
+  const cumL = stops.map((g) => {
+    const m = g.getAttribute('transform').match(/translate\(\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\)/);
+    if (!m) return 0;
+    return lengthAtPoint(path, parseFloat(m[1]), parseFloat(m[2]), total);
   });
+
+  // Each leg of the walk takes the same wall-clock time, regardless of
+  // how long the geographic leg is — so it feels like a steady pace.
+  const STEP_MS = 1400;
+
+  // Reset: full dasharray, line fully hidden, all dots cleared.
+  path.style.transition = 'none';
+  path.style.strokeDasharray = `${total}`;
+  path.style.strokeDashoffset = `${total}`;
+  stops.forEach((s) => s.classList.remove('show', 'active'));
+  void path.getBoundingClientRect(); // commit the reset before transitions
+
+  // First dot pops immediately at the starting point.
+  stops[0].classList.add('show', 'active');
+  label.textContent = stops[0].dataset.label;
+
+  // Then for each subsequent dot, draw the line out to it over STEP_MS,
+  // and pop the dot in just as the line arrives.
+  for (let i = 1; i < stops.length; i++) {
+    setTimeout(() => {
+      path.style.transition = `stroke-dashoffset ${STEP_MS}ms linear`;
+      path.style.strokeDashoffset = `${total - cumL[i]}`;
+    }, (i - 1) * STEP_MS);
+
+    setTimeout(() => {
+      stops.forEach((s) => s.classList.remove('active'));
+      stops[i].classList.add('show', 'active');
+      label.textContent = stops[i].dataset.label;
+    }, i * STEP_MS);
+  }
 }
 
 document.getElementById('replayMap')?.addEventListener('click', animateMap);
