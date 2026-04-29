@@ -103,7 +103,9 @@ const state = {
   shiftCustomers: [],
   selectedBean: null,
   build: {},      // ingredient id → parts
-  served: false
+  served: false,
+  pendingCoachTip: null,
+  coachHideTimer: null
 };
 
 // ---------- DOM ----------
@@ -342,7 +344,8 @@ const startShift = () => {
   shiftOverlay.hidden = true;
   resultOverlay.hidden = true;
   showCoach(COACH_TIPS.intro);
-  setTimeout(hideCoach, 5000);
+  clearTimeout(state.coachHideTimer);
+  state.coachHideTimer = setTimeout(hideCoach, 8000);
   loadCustomer();
 };
 
@@ -397,19 +400,27 @@ const handleServe = () => {
   resultPoints.textContent = String(result.points);
   resultOverlay.hidden = false;
 
-  // Coach tip if they missed
+  // Stash the coach tip for after the result overlay is dismissed.
   if (result.tier === 'perfect') {
-    showCoach(COACH_TIPS.perfect);
+    state.pendingCoachTip = COACH_TIPS.perfect;
   } else if (state.selectedBean !== customer.bean) {
-    showCoach(COACH_TIPS.beanOff);
+    state.pendingCoachTip = COACH_TIPS.beanOff;
   } else {
-    showCoach(COACH_TIPS.ratioOff);
+    state.pendingCoachTip = COACH_TIPS.ratioOff;
   }
-  setTimeout(hideCoach, 6000);
 };
 
 const advance = () => {
   resultOverlay.hidden = true;
+
+  // Show the coach tip now that the result overlay is closed.
+  if (state.pendingCoachTip) {
+    showCoach(state.pendingCoachTip);
+    state.pendingCoachTip = null;
+    clearTimeout(state.coachHideTimer);
+    state.coachHideTimer = setTimeout(hideCoach, 12000);
+  }
+
   state.customerIndex += 1;
   if (state.customerIndex >= SHIFT_LENGTH) {
     endShift();
