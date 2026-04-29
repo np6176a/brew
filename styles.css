@@ -872,22 +872,3 @@ strong {
 }
 .back-to-bar:hover { border-bottom-color: var(--terracotta); }
 
-.finale-cta {
-  display: inline-block;
-  margin-top: 12px;
-  font-family: var(--ui);
-  font-size: 14px;
-  letter-spacing: 0.4px;
-  color: var(--cream-light);
-  background: var(--espresso);
-  border: 1.5px solid var(--espresso);
-  padding: 10px 22px;
-  border-radius: 999px;
-  text-decoration: none;
-  transition: background 180ms, transform 120ms;
-}
-.finale-cta:hover {
-  background: var(--espresso-soft);
-  transform: translateY(-1px);
-}
-
