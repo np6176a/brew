@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brew — A journey from bean to cup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Caveat:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Progress bar -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <!-- Screen counter -->
+  <div class="screen-counter">
+    <span id="currentScreen">1</span> / <span id="totalScreens">7</span>
+  </div>
+
+  <!-- Back to the bar -->
+  <a class="back-to-bar" href="index.html">← Back to the bar</a>
+
+  <main id="game">
+
+    <!-- ========== SCREEN 1: ORIGIN ========== -->
+    <section class="screen active" data-screen="1" data-narrated="true">
+      <div class="screen-inner screen-origin">
+        <div class="left-stack">
+          <div class="content-block">
+            <p class="eyebrow">Chapter one</p>
+            <h1 class="display">A goat herder, a discovery</h1>
+            <p class="helper-text">Ethiopia · 9th century · <em>Coffea arabica</em></p>
+            <p class="body">
+              A goat herder named Kaldi noticed his goats dancing after eating bright
+              red berries from a wild shrub. Local monks brewed them into a drink that
+              kept them awake through long nights of prayer — the first cup of coffee.
+            </p>
+          </div>
+
+          <!-- Knowledge Check 1 — True/False -->
+          <div class="knowledge-check" data-check="1" data-type="tf">
+            <p class="check-question">True or false: coffee was first discovered in South America.</p>
+            <div class="check-options tf-options">
+              <button class="option" data-correct="false">True</button>
+              <button class="option" data-correct="true">False</button>
+            </div>
+            <div class="check-feedback" id="feedback-1"></div>
+          </div>
+        </div>
+        <div class="illustration-block">
+          <video
+            class="origin-video"
+            src="media/01-origin.mp4"
+            autoplay
+            loop
+            muted
+            playsinline
+            aria-label="Kaldi and the dancing goats"
+          ></video>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SCREEN 2: THE SPREAD ========== -->
+    <section class="screen" data-screen="2" data-narrated="true">
+      <div class="screen-inner screen-spread">
+        <div class="content-block">
+          <p class="eyebrow">Chapter two</p>
+          <h1 class="display">Coffee finds the world</h1>
+          <p class="helper-text">From Ethiopia to the Americas — by way of the great trade routes.</p>
+          <p class="body">
+            Coffee crossed the Red Sea to Yemen, where Sufi mystics brewed it for
+            late-night devotion. From there it spread through Cairo, Istanbul, and into
+            Europe — and by the 1700s, coffeehouses were called <em>"penny universities"</em>.
+          </p>
+          <p class="helper-text-sub">Yemen · Istanbul · Venice · Vienna · Amsterdam</p>
+        </div>
+        <div class="map-block">
+          <div class="map-container" id="map">
+            <svg viewBox="0 0 600 400" id="mapSvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+              <!-- Hand-drawn world map artwork (raster) -->
+              <image href="assets/map.png" x="0" y="0" width="600" height="400" preserveAspectRatio="xMidYMid meet" />
+
+              <!-- Animated path of coffee's journey: Ethiopia → Yemen → Istanbul → Venice → Amsterdam → Americas → South America -->
+              <path id="journeyPath"
+                    d="M365,270 Q382,248 390,220 Q375,205 350,190 Q325,180 300,170 Q295,158 285,145 Q210,140 130,150 Q150,225 165,288"
+                    class="journey-path" />
+
+              <!-- Stops -->
+              <g class="stop" data-label="Ethiopia · ~800 CE"
+                 transform="translate(365,270)"><circle r="7"/></g>
+              <g class="stop" data-label="Yemen · 1430s"
+                 transform="translate(390,220)"><circle r="7"/></g>
+              <g class="stop" data-label="Istanbul · 1550s"
+                 transform="translate(350,190)"><circle r="7"/></g>
+              <g class="stop" data-label="Venice · 1615"
+                 transform="translate(300,170)"><circle r="7"/></g>
+              <g class="stop" data-label="Amsterdam · 1660s"
+                 transform="translate(285,145)"><circle r="7"/></g>
+              <g class="stop" data-label="To the Americas · 1650s"
+                 transform="translate(130,150)"><circle r="7"/></g>
+              <g class="stop" data-label="South America · 1720s"
+                 transform="translate(165,288)"><circle r="7"/></g>
+            </svg>
+            <div class="map-label" id="mapLabel">Ethiopia · ~800 CE</div>
+          </div>
+          <button class="ghost-button" id="replayMap">Replay journey</button>
+        </div>
+
+        <!-- Knowledge Check 2 — Matching -->
+        <div class="knowledge-check full-row" data-check="2" data-type="matching">
+          <p class="check-question">Match each place to its role in coffee's spread.</p>
+          <div class="check-matching" id="matching-2"></div>
+          <div class="check-feedback" id="feedback-2"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SCREEN 3: FIRST WAVE ========== -->
+    <section class="screen" data-screen="3" data-narrated="true">
+      <div class="screen-inner screen-first-wave">
+        <div class="left-stack">
+          <div class="content-block">
+            <p class="eyebrow">Chapter three · The first wave</p>
+            <h1 class="display">Coffee in every cupboard</h1>
+            <p class="helper-text">1800s — 1950s</p>
+            <p class="body">
+              Industrial roasting and vacuum-sealing turn coffee into a packaged good. By
+              the post-war boom, tin cans and instant crystals are fixtures of every
+              American kitchen, office, and diner — built for scale, shelf life, and
+              consistency. Coffee is <em>everywhere</em> and <em>daily fuel</em>:
+              ubiquitous, dependable, never the point.
+            </p>
+            <p class="helper-text-sub">Convenience · Consistency · Scale</p>
+            <p class="helper-text-brands">Folgers &middot; Maxwell House &middot; Nescafé</p>
+          </div>
+
+          <!-- Knowledge Check 3 — MCQ -->
+          <div class="knowledge-check" data-check="3" data-type="mcq">
+            <p class="check-question">What best describes the first wave of coffee?</p>
+            <div class="check-options">
+              <button class="option" data-correct="false">Single-origin beans roasted by small craft roasters</button>
+              <button class="option" data-correct="true">Mass-produced, shelf-stable coffee built for convenience</button>
+              <button class="option" data-correct="false">Espresso-based drinks served in coffeehouse chains</button>
+              <button class="option" data-correct="false">Direct-trade beans with traceable farm origins</button>
+            </div>
+            <div class="check-feedback" id="feedback-3"></div>
+          </div>
+        </div>
+        <div class="illustration-block">
+          <img
+            class="screen-image"
+            src="media/03-first-wave.png"
+            alt="A mid-century kitchen scene with a tin of premium all-purpose coffee, a percolator, and a mug of black coffee."
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SCREEN 4: SECOND WAVE ========== -->
+    <section class="screen" data-screen="4" data-narrated="true">
+      <div class="screen-inner screen-second-wave">
+        <div class="left-stack">
+          <div class="content-block">
+            <p class="eyebrow">Chapter four · The second wave</p>
+            <h1 class="display">Coffee becomes an experience</h1>
+            <p class="helper-text">1970s — 1990s</p>
+            <p class="body">
+              A backlash against bland supermarket coffee. Specialty roasters in
+              <em>Berkeley</em> (Peet's, 1966) and <em>Seattle</em> (Starbucks, 1971)
+              introduce espresso drinks and a vocabulary to match — lattes, cappuccinos,
+              mochas, ordered like cocktails. The café becomes a <em>"third place"</em>
+              between home and work, and coffee becomes a lifestyle defined by ritual,
+              branding, and dark roast.
+            </p>
+            <p class="helper-text-sub">Latte · Cappuccino · Mocha · "Third place"</p>
+            <p class="helper-text-brands">Peet's &middot; Starbucks</p>
+          </div>
+
+          <!-- Knowledge Check 4 — MCQ -->
+          <div class="knowledge-check" data-check="4" data-type="mcq">
+            <p class="check-question">Which best captures the second wave of coffee?</p>
+            <div class="check-options">
+              <button class="option" data-correct="false">Single-origin beans with terroir-focused tasting notes</button>
+              <button class="option" data-correct="false">Vacuum-sealed cans of pre-ground coffee for the kitchen</button>
+              <button class="option" data-correct="true">Espresso drinks and the café as a "third place" destination</button>
+              <button class="option" data-correct="false">Direct-trade relationships with named farmers</button>
+            </div>
+            <div class="check-feedback" id="feedback-4"></div>
+          </div>
+        </div>
+        <div class="illustration-block">
+          <img
+            class="screen-image"
+            src="media/04-second-wave.png"
+            alt="A specialty café counter with a La Marzocco espresso machine, two latte glasses with rosetta art, and a chalkboard listing latte, cappuccino, and mocha."
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SCREEN 5: THIRD WAVE ========== -->
+    <section class="screen" data-screen="5" data-narrated="true">
+      <div class="screen-inner screen-third-wave">
+        <div class="left-stack">
+          <div class="content-block">
+            <p class="eyebrow">Chapter five · The third wave</p>
+            <h1 class="display">Coffee as craft</h1>
+            <p class="helper-text">2000s — today</p>
+            <p class="body">
+              Roasters like <em>Stumptown</em> (Portland), <em>Intelligentsia</em>
+              (Chicago), and <em>Counter Culture</em> (Durham) treat coffee like wine —
+              with attention to <em>origin, farmer, varietal, and process</em>. Light
+              roasts replace dark to preserve the bean's character. Single-origin replaces
+              blends, and bags now read like tasting menus: farm name, elevation,
+              processing method, and flavor notes — blueberry, jasmine, stone fruit.
+              Direct-trade relationships put the farmer back on the label.
+            </p>
+            <p class="helper-text-sub">Origin · Farmer · Process · Terroir</p>
+            <p class="helper-text-brands">Stumptown &middot; Intelligentsia &middot; Counter Culture</p>
+          </div>
+
+          <!-- Knowledge Check 5 — MCQ -->
+          <div class="knowledge-check" data-check="5" data-type="mcq">
+            <p class="check-question">Which of these would you most likely find in a third-wave café?</p>
+            <div class="check-options">
+              <button class="option" data-correct="false">A can of pre-ground dark roast on a grocery shelf</button>
+              <button class="option" data-correct="false">A 24-oz caramel mocha with extra whipped cream</button>
+              <button class="option" data-correct="true">A pour-over of a single-origin Ethiopian Yirgacheffe with tasting notes on the bag</button>
+              <button class="option" data-correct="false">An instant coffee packet labeled "100% pure"</button>
+            </div>
+            <div class="check-feedback" id="feedback-5"></div>
+          </div>
+        </div>
+        <div class="illustration-block">
+          <img
+            class="screen-image"
+            src="media/05-third-wave.png"
+            alt="A barista pours water from a gooseneck kettle over a Hario V60 pour-over onto a scale, beside a bag of single-origin Ethiopia Yirgacheffe with tasting notes of blueberry, jasmine, and stone fruit."
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SCREEN 6: BREW LAB ========== -->
+    <section class="screen" data-screen="6">
+      <div class="screen-inner screen-brew-lab">
+        <div class="lab-intro">
+          <div class="content-block">
+            <p class="eyebrow">Chapter six · The brew lab</p>
+            <h1 class="display">Build your cup</h1>
+            <p class="body small">
+              Pick an origin, roast, grind, and method. See how the variables shape your cup.
+            </p>
+          </div>
+          <img
+            class="methods-image"
+            src="media/06-brew-methods.png"
+            alt="Illustration comparing four brew methods side by side: espresso machine, pour-over (Hario V60), French press, and AeroPress."
+          />
+        </div>
+
+        <div class="brew-lab">
+          <div class="lab-controls">
+            <div class="lab-row">
+              <label>Origin</label>
+              <div class="chip-group" data-control="origin">
+                <button class="chip active" data-value="ethiopia">Ethiopia</button>
+                <button class="chip" data-value="brazil">Brazil</button>
+                <button class="chip" data-value="colombia">Colombia</button>
+                <button class="chip" data-value="sumatra">Sumatra</button>
+              </div>
+            </div>
+
+            <div class="lab-row">
+              <label>Roast</label>
+              <div class="chip-group" data-control="roast">
+                <button class="chip active" data-value="light">Light</button>
+                <button class="chip" data-value="medium">Medium</button>
+                <button class="chip" data-value="dark">Dark</button>
+              </div>
+            </div>
+
+            <div class="lab-row">
+              <label>Grind</label>
+              <div class="chip-group" data-control="grind">
+                <button class="chip" data-value="fine">Fine</button>
+                <button class="chip active" data-value="medium">Medium</button>
+                <button class="chip" data-value="coarse">Coarse</button>
+              </div>
+            </div>
+
+            <div class="lab-row">
+              <label>Method</label>
+              <div class="chip-group" data-control="method">
+                <button class="chip" data-value="espresso">Espresso</button>
+                <button class="chip active" data-value="pourover">Pour-over</button>
+                <button class="chip" data-value="frenchpress">French press</button>
+                <button class="chip" data-value="aeropress">AeroPress</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="lab-result" id="labResult">
+            <p class="result-label">Your cup</p>
+            <h2 class="result-title" id="resultTitle">Bright & floral</h2>
+            <p class="result-desc" id="resultDesc">
+              A delicate cup with high acidity, light body, and flavors of citrus,
+              jasmine, and stone fruit. The light roast preserves the origin character
+              of the Ethiopian beans, and the pour-over method showcases clarity.
+            </p>
+            <div class="result-bars">
+              <div class="bar-row">
+                <span class="bar-label">Acidity</span>
+                <div class="bar"><div class="bar-fill" id="bar-acidity" style="width: 80%"></div></div>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">Body</span>
+                <div class="bar"><div class="bar-fill" id="bar-body" style="width: 30%"></div></div>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">Sweetness</span>
+                <div class="bar"><div class="bar-fill" id="bar-sweet" style="width: 60%"></div></div>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">Bitterness</span>
+                <div class="bar"><div class="bar-fill" id="bar-bitter" style="width: 25%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SCREEN 7: YOUR CUP / TASTING GAME ========== -->
+    <section class="screen" data-screen="7">
+      <div class="screen-inner screen-your-cup">
+        <div class="your-cup-left">
+          <div class="content-block">
+            <p class="eyebrow">Chapter seven · Your cup</p>
+            <h1 class="display">You've completed the journey</h1>
+          </div>
+          <video
+            class="your-cup-video"
+            src="media/07-your-cup.mp4"
+            autoplay
+            loop
+            muted
+            playsinline
+            aria-label="A finished cup of coffee, the end of the journey."
+          ></video>
+          <p class="body finale-line">Now go drink something good.</p>
+        </div>
+
+        <div class="your-cup-right">
+          <div class="tasting-game">
+            <p class="game-label">One last thing — match the tasting note to the description</p>
+            <div class="match-grid" id="matchGrid">
+              <!-- Generated by JS -->
+            </div>
+            <div class="match-feedback" id="matchFeedback"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Avatar picture-in-picture (Wren · head barista) -->
+  <aside class="avatar-pip" id="avatarPip" aria-label="Head barista narration">
+    <div class="avatar-pip-frame">
+      <img class="avatar-pip-img" src="media/master-barista.png" alt="Wren, head barista" />
+      <span class="avatar-pip-sub">Wren · head barista</span>
+    </div>
+  </aside>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <p class="nav-hint" id="navHint"></p>
+    <div class="nav-buttons">
+      <button class="nav-button" id="backButton" disabled>← Back</button>
+      <button class="nav-button primary" id="nextButton">Next →</button>
+    </div>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+</html>

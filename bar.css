@@ -1,0 +1,653 @@
+/* ============================================
+   BREW — Barista Bar (game)
+   Reuses the warm editorial palette/fonts from
+   the course; layout is workbench-style.
+   ============================================ */
+
+:root {
+  --cream: #F5EFE4;
+  --cream-light: #FAF6EE;
+  --cream-dark: #ECE3D2;
+  --espresso: #3B2418;
+  --espresso-soft: #5C3B2A;
+  --crema: #C89968;
+  --crema-light: #E0B987;
+  --terracotta: #B5552E;
+  --sage: #7A8B6E;
+  --ink: #2A1A12;
+  --ink-muted: #6B5544;
+  --paper: #FAF6EE;
+  --water: #B6C9D2;
+
+  --display: 'Fraunces', Georgia, serif;
+  --body: 'Fraunces', Georgia, serif;
+  --hand: 'Caveat', cursive;
+  --ui: 'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  min-height: 100%;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.5; }
+
+/* ============================================
+   Header
+   ============================================ */
+.bar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 36px;
+  background: var(--cream-light);
+  border-bottom: 1px solid var(--cream-dark);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.bar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+.bar-logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
+}
+.bar-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  color: var(--espresso);
+}
+
+.bar-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--cream);
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--cream-dark);
+  font-family: var(--ui);
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+.bean-icon { font-size: 18px; }
+.bean-label { letter-spacing: 0.5px; }
+.bean-count {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--espresso);
+  min-width: 32px;
+  text-align: right;
+  transition: transform 250ms ease, color 250ms ease;
+}
+.bean-count.bump {
+  transform: scale(1.25);
+  color: var(--terracotta);
+}
+
+.bar-history {
+  font-family: var(--hand);
+  font-size: 22px;
+  color: var(--terracotta);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 200ms;
+}
+.bar-history:hover { border-bottom-color: var(--terracotta); }
+
+/* ============================================
+   Main layout
+   ============================================ */
+.bar-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 36px 80px;
+  display: grid;
+  gap: 24px;
+}
+
+.eyebrow {
+  font-family: var(--hand);
+  color: var(--terracotta);
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+.display {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 36px);
+  line-height: 1.15;
+  color: var(--espresso);
+}
+
+/* ============================================
+   Coach PIP (Master Barista)
+   ============================================ */
+.coach-pip {
+  position: fixed;
+  top: 130px;
+  right: 140px;
+  z-index: 15;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 320px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 350ms ease, transform 350ms ease;
+}
+.coach-pip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.coach-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--cream-light);
+  box-shadow: 0 4px 14px rgba(59, 36, 24, 0.18);
+  flex-shrink: 0;
+}
+
+.coach-bubble {
+  background: var(--cream-light);
+  border: 1px solid var(--cream-dark);
+  border-radius: 14px;
+  padding: 10px 14px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(59, 36, 24, 0.08);
+}
+.coach-bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 18px;
+  width: 0; height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid var(--cream-light);
+}
+
+.coach-name {
+  font-family: var(--ui);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 2px;
+}
+.coach-line {
+  font-family: var(--body);
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+/* ============================================
+   Customer card
+   ============================================ */
+.customer-card {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  align-items: center;
+  background: var(--cream-light);
+  border: 1px solid var(--cream-dark);
+  border-radius: 16px;
+  padding: 22px 28px;
+  box-shadow: 0 6px 20px rgba(59, 36, 24, 0.06);
+  transform: translateX(40px);
+  opacity: 0;
+  transition: transform 450ms ease, opacity 450ms ease;
+}
+.customer-card.entered {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.customer-meta { border-right: 1px dashed var(--cream-dark); padding-right: 24px; }
+.customer-name {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--espresso);
+  margin-top: 4px;
+}
+
+.customer-bubble {
+  background: var(--cream);
+  border-radius: 14px;
+  padding: 16px 20px;
+  position: relative;
+  border: 1px solid var(--cream-dark);
+}
+.customer-bubble::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 22px;
+  width: 0; height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid var(--cream);
+}
+.customer-line {
+  font-family: var(--display);
+  font-size: 19px;
+  font-style: italic;
+  color: var(--espresso);
+  line-height: 1.4;
+}
+
+/* ============================================
+   Workbench (two columns)
+   ============================================ */
+.workbench {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 24px;
+}
+
+.station {
+  background: var(--cream-light);
+  border: 1px solid var(--cream-dark);
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 6px 20px rgba(59, 36, 24, 0.04);
+}
+
+.station-help {
+  font-family: var(--body);
+  font-style: italic;
+  color: var(--ink-muted);
+  font-size: 14px;
+  margin: 4px 0 16px;
+}
+
+/* ============================================
+   Bean grid
+   ============================================ */
+.bean-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.bean-card {
+  background: var(--cream);
+  border: 2px solid var(--cream-dark);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: left;
+  transition: border-color 180ms, transform 180ms, background 180ms;
+}
+.bean-card:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--crema);
+}
+.bean-card.selected {
+  border-color: var(--terracotta);
+  background: var(--cream-light);
+  box-shadow: 0 0 0 3px rgba(181, 85, 46, 0.12);
+}
+
+.bean-origin {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--espresso);
+  display: block;
+  margin-bottom: 4px;
+}
+.bean-flavor {
+  font-family: var(--hand);
+  font-size: 17px;
+  color: var(--terracotta);
+  display: block;
+}
+.bean-notes {
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--ink-muted);
+  font-style: italic;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* ============================================
+   Build station
+   ============================================ */
+.build-layout {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 24px;
+  align-items: start;
+}
+
+.ingredient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ingredient-row {
+  display: grid;
+  grid-template-columns: 16px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  background: var(--cream);
+  border: 1px solid var(--cream-dark);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.ingredient-swatch {
+  width: 14px; height: 14px;
+  border-radius: 4px;
+  border: 1px solid var(--espresso);
+}
+
+.ingredient-info { display: flex; flex-direction: column; }
+.ingredient-name {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--espresso);
+}
+.ingredient-hint {
+  font-family: var(--body);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.parts-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.parts-button {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--espresso);
+  background: var(--cream-light);
+  color: var(--espresso);
+  font-size: 16px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 150ms;
+}
+.parts-button:hover:not(:disabled) { background: var(--cream-dark); }
+
+.parts-value {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--espresso);
+  min-width: 22px;
+  text-align: center;
+}
+.parts-unit {
+  font-family: var(--hand);
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+/* ============================================
+   Cup
+   ============================================ */
+.cup-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.cup-svg {
+  width: 160px;
+  height: 200px;
+}
+.cup-caption {
+  font-family: var(--hand);
+  font-size: 16px;
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+/* ============================================
+   Action buttons
+   ============================================ */
+.build-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.primary-button, .ghost-button {
+  font-family: var(--ui);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1.5px solid var(--espresso);
+  transition: background 180ms, color 180ms, transform 120ms;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+.primary-button {
+  background: var(--espresso);
+  color: var(--cream-light);
+}
+.primary-button:hover:not(:disabled) {
+  background: var(--espresso-soft);
+  transform: translateY(-1px);
+}
+.ghost-button {
+  background: transparent;
+  color: var(--espresso);
+}
+.ghost-button:hover { background: var(--cream-dark); }
+
+/* ============================================
+   Result overlay
+   ============================================ */
+.result-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 26, 18, 0.42);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  animation: fade-in 250ms ease;
+}
+.result-overlay[hidden] { display: none; }
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.result-card {
+  background: var(--cream-light);
+  border-radius: 18px;
+  padding: 36px 44px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.18);
+  text-align: center;
+  animation: pop-in 320ms cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.result-line {
+  font-family: var(--body);
+  font-size: 16px;
+  color: var(--ink);
+  margin: 12px 0 18px;
+  line-height: 1.5;
+}
+.result-points {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--terracotta);
+  margin-bottom: 22px;
+}
+
+.shift-card { padding: 44px 48px; }
+.shift-rank {
+  font-family: var(--hand);
+  font-size: 24px;
+  color: var(--terracotta);
+  margin: 12px 0 22px;
+}
+.shift-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 880px) {
+  .workbench { grid-template-columns: 1fr; }
+  .customer-card { grid-template-columns: 1fr; }
+  .customer-meta { border-right: none; border-bottom: 1px dashed var(--cream-dark); padding: 0 0 14px; }
+  .build-layout { grid-template-columns: 1fr; }
+  .cup-wrap { order: -1; }
+  .coach-pip {
+    position: static;
+    margin-bottom: 12px;
+    opacity: 1;
+    transform: none;
+    max-width: none;
+  }
+}
+
+/* ============================================
+   Intro overlay (first-load tutorial)
+   ============================================ */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 26, 18, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: fade-in 280ms ease;
+  padding: 24px;
+}
+.intro-overlay.dismissed { display: none; }
+
+.intro-card {
+  background: var(--cream-light);
+  border-radius: 20px;
+  padding: 36px 44px 32px;
+  max-width: 540px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+  text-align: left;
+  animation: pop-in 360ms cubic-bezier(0.2, 1.4, 0.4, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.intro-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.intro-card .eyebrow { text-align: center; margin-bottom: 4px; }
+.intro-card .display { text-align: center; margin-bottom: 14px; }
+
+.intro-line {
+  font-family: var(--body);
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.intro-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.intro-steps li {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-family: var(--body);
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.intro-step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  color: var(--cream-light);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.intro-coach {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--ink-muted);
+  background: var(--cream);
+  border-left: 3px solid var(--crema);
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 22px;
+}
+.intro-coach a { color: var(--terracotta); }
+
+.intro-card .primary-button {
+  display: block;
+  margin: 0 auto;
+}

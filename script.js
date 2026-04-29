@@ -27,7 +27,7 @@ function showScreen(n) {
   progressFill.style.width = `${(n / totalScreens) * 100}%`;
 
   backButton.disabled = n === 1;
-  nextButton.textContent = n === totalScreens ? 'Start again' : 'Next →';
+  nextButton.textContent = n === totalScreens ? 'Back to the bar →' : 'Next →';
 
   // Trigger screen-specific behavior
   if (n === 2) animateMap();
@@ -48,8 +48,8 @@ nextButton.addEventListener('click', () => {
     if (!canAdvance(currentScreen)) return;
     showScreen(currentScreen + 1);
   } else {
-    // Finish — restart
-    restartGame();
+    // Finish — head back to the bar.
+    window.location.href = 'index.html';
   }
 });
 
