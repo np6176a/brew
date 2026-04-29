@@ -96,7 +96,7 @@ main {
 .avatar-pip {
   position: fixed;
   right: 24px;
-  top: 24px;
+  top: 60px;
   width: 176px;
   height: 110px;
   background: var(--espresso);
