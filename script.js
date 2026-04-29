@@ -27,7 +27,7 @@ function showScreen(n) {
   progressFill.style.width = `${(n / totalScreens) * 100}%`;
 
   backButton.disabled = n === 1;
-  nextButton.textContent = n === totalScreens ? 'Finish' : 'Next →';
+  nextButton.textContent = n === totalScreens ? 'Start again' : 'Next →';
 
   // Trigger screen-specific behavior
   if (n === 2) animateMap();
@@ -170,6 +170,7 @@ function setupMatchingCheck(check) {
     const a = selected;
     const b = btn;
     const isPair = a.dataset.type !== b.dataset.type && a.dataset.value === b.dataset.value;
+    markAnswered(checkId);
     if (isPair) {
       a.classList.remove('selected');
       a.classList.add('matched');
@@ -178,7 +179,6 @@ function setupMatchingCheck(check) {
       selected = null;
       if (matched === pairs.length) {
         feedback.textContent = "Nice. You've traced coffee's path through the old world.";
-        markAnswered(checkId);
       } else {
         feedback.textContent = `${matched} of ${pairs.length} matched.`;
       }
