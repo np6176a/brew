@@ -13,10 +13,10 @@
 
   <!-- Top bar -->
   <header class="bar-header">
-    <div class="bar-brand">
-      <span class="bar-logo">☕</span>
-      <span class="bar-title">Brew · Barista Bar</span>
-    </div>
+    <a class="bar-brand" href="index.html" aria-label="Brew · Barista Bar">
+      <img class="bar-logo-img" src="media/brew-logo.png" alt="Brew" />
+      <span class="bar-title">Barista Bar</span>
+    </a>
     <div class="bar-score">
       <span class="bean-icon" aria-hidden="true">🫘</span>
       <span class="bean-label">Barista points</span>
@@ -24,6 +24,30 @@
     </div>
     <a class="bar-history" href="course.html">History &amp; guide →</a>
   </header>
+
+  <!-- Intro modal -->
+  <div class="intro-overlay" id="introOverlay">
+    <div class="intro-card">
+      <img class="intro-logo" src="media/brew-logo.png" alt="Brew" />
+      <p class="eyebrow">How to play</p>
+      <h2 class="display">Welcome to the Barista Bar</h2>
+      <p class="intro-line">
+        You're behind the counter for a 5-customer shift. Each customer asks for
+        a drink with a flavor cue — your job is to read the order and pour it
+        right.
+      </p>
+      <ol class="intro-steps">
+        <li><span class="intro-step-num">1</span><span><strong>Pick the beans.</strong> Match the customer's flavor cue (fruity, nutty, earthy…) to one of four origins.</span></li>
+        <li><span class="intro-step-num">2</span><span><strong>Build the drink.</strong> Use +/− to add parts of espresso, milk, foam, water, or syrup. Watch the cup fill — get the ratio right.</span></li>
+        <li><span class="intro-step-num">3</span><span><strong>Serve.</strong> Score up to <strong>100 barista points</strong> per drink based on bean match and ratio accuracy.</span></li>
+      </ol>
+      <p class="intro-coach">
+        Wren, the head barista, will drop tips along the way. New to coffee?
+        Read the <a href="course.html">history &amp; guide</a> first.
+      </p>
+      <button class="primary-button" id="startShiftButton" type="button">Start the shift →</button>
+    </div>
+  </div>
 
   <main id="bar" class="bar-main">
 

@@ -451,9 +451,31 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// ---------- Intro modal ----------
+
+const introOverlay = $('introOverlay');
+const startShiftButton = $('startShiftButton');
+
+const beginGame = () => {
+  introOverlay.classList.add('dismissed');
+  try { sessionStorage.setItem('brewIntroSeen', '1'); } catch (_) {}
+  startShift();
+};
+
+startShiftButton.addEventListener('click', beginGame);
+
 // ---------- Init ----------
 
 renderBeans();
 renderIngredients();
 renderBuild();
-startShift();
+
+const introSeen = (() => {
+  try { return sessionStorage.getItem('brewIntroSeen') === '1'; }
+  catch (_) { return false; }
+})();
+
+if (introSeen) {
+  introOverlay.classList.add('dismissed');
+  startShift();
+}

@@ -55,13 +55,25 @@ button:disabled { cursor: not-allowed; opacity: 0.5; }
   z-index: 20;
 }
 
-.bar-brand { display: flex; align-items: center; gap: 10px; }
-.bar-logo { font-size: 22px; }
+.bar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+.bar-logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
+}
 .bar-title {
   font-family: var(--display);
   font-weight: 600;
   font-size: 20px;
   letter-spacing: 0.5px;
+  color: var(--espresso);
 }
 
 .bar-score {
@@ -133,7 +145,7 @@ button:disabled { cursor: not-allowed; opacity: 0.5; }
    ============================================ */
 .coach-pip {
   position: fixed;
-  top: 84px;
+  top: 130px;
   right: 36px;
   z-index: 15;
   display: flex;
@@ -540,4 +552,102 @@ button:disabled { cursor: not-allowed; opacity: 0.5; }
     transform: none;
     max-width: none;
   }
+}
+
+/* ============================================
+   Intro overlay (first-load tutorial)
+   ============================================ */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 26, 18, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: fade-in 280ms ease;
+  padding: 24px;
+}
+.intro-overlay.dismissed { display: none; }
+
+.intro-card {
+  background: var(--cream-light);
+  border-radius: 20px;
+  padding: 36px 44px 32px;
+  max-width: 540px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+  text-align: left;
+  animation: pop-in 360ms cubic-bezier(0.2, 1.4, 0.4, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.intro-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.intro-card .eyebrow { text-align: center; margin-bottom: 4px; }
+.intro-card .display { text-align: center; margin-bottom: 14px; }
+
+.intro-line {
+  font-family: var(--body);
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.intro-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.intro-steps li {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-family: var(--body);
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.intro-step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  color: var(--cream-light);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.intro-coach {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--ink-muted);
+  background: var(--cream);
+  border-left: 3px solid var(--crema);
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 22px;
+}
+.intro-coach a { color: var(--terracotta); }
+
+.intro-card .primary-button {
+  display: block;
+  margin: 0 auto;
 }
