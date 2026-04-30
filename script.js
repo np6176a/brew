@@ -13,9 +13,52 @@ const totalScreensEl = document.getElementById('totalScreens');
 const backButton = document.getElementById('backButton');
 const nextButton = document.getElementById('nextButton');
 const avatarPip = document.getElementById('avatarPip');
+const avatarPipVideo = document.getElementById('avatarPipVideo');
+const avatarPipPlay = document.getElementById('avatarPipPlay');
+
+function syncPlayButton() {
+  if (!avatarPipPlay || !avatarPipVideo) return;
+  const playing = !avatarPipVideo.paused && !avatarPipVideo.ended;
+  avatarPipPlay.setAttribute('aria-pressed', String(playing));
+  avatarPipPlay.setAttribute('aria-label', playing ? 'Pause narration' : 'Play narration');
+  avatarPipPlay.textContent = playing ? 'Pause' : 'Play';
+}
+
+if (avatarPipVideo) {
+  avatarPipVideo.muted = false;
+  ['play', 'pause', 'ended'].forEach((evt) =>
+    avatarPipVideo.addEventListener(evt, syncPlayButton)
+  );
+}
 
 let currentScreen = 1;
 totalScreensEl.textContent = totalScreens;
+
+function playAvatarUnmuted() {
+  if (!avatarPipVideo) return;
+  avatarPipVideo.muted = false;
+  // Browsers block autoplay-with-sound without a user gesture — leave paused on failure.
+  avatarPipVideo.play().catch(() => {}).finally(syncPlayButton);
+}
+
+function setAvatarSource(target) {
+  if (!avatarPipVideo) return;
+  const src = target?.dataset?.avatar;
+  if (!src) {
+    avatarPipVideo.removeAttribute('src');
+    avatarPipVideo.load();
+    return;
+  }
+  const absolute = new URL(src, window.location.href).href;
+  if (avatarPipVideo.src === absolute) {
+    avatarPipVideo.currentTime = 0;
+    playAvatarUnmuted();
+    return;
+  }
+  avatarPipVideo.src = src;
+  avatarPipVideo.load();
+  playAvatarUnmuted();
+}
 
 function showScreen(n) {
   screens.forEach((s) => s.classList.remove('active'));
@@ -33,10 +76,28 @@ function showScreen(n) {
   if (n === 2) animateMap();
 
   if (target && avatarPip) {
-    avatarPip.classList.toggle('visible', target.dataset.narrated === 'true');
+    const narrated = target.dataset.narrated === 'true';
+    avatarPip.classList.toggle('visible', narrated);
+    if (narrated) {
+      setAvatarSource(target);
+    } else if (avatarPipVideo) {
+      avatarPipVideo.pause();
+    }
   }
 
   if (typeof updateNextGate === 'function') updateNextGate();
+}
+
+if (avatarPipPlay && avatarPipVideo) {
+  avatarPipPlay.addEventListener('click', () => {
+    if (avatarPipVideo.paused || avatarPipVideo.ended) {
+      if (avatarPipVideo.ended) avatarPipVideo.currentTime = 0;
+      playAvatarUnmuted();
+    } else {
+      avatarPipVideo.pause();
+    }
+  });
+  syncPlayButton();
 }
 
 backButton.addEventListener('click', () => {
@@ -253,7 +314,9 @@ updateNextGate();
 
 const initialScreen = document.querySelector('.screen.active');
 if (initialScreen && avatarPip) {
-  avatarPip.classList.toggle('visible', initialScreen.dataset.narrated === 'true');
+  const narrated = initialScreen.dataset.narrated === 'true';
+  avatarPip.classList.toggle('visible', narrated);
+  if (narrated) setAvatarSource(initialScreen);
 }
 
 // ==========================================
