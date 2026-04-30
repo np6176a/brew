@@ -62,6 +62,16 @@ const RECIPES = {
     name: 'macchiato',
     parts: { espresso: 2, foam: 1 },
     blurb: 'Espresso "marked" with a dab of foam.'
+  },
+  vanilla_latte: {
+    name: 'vanilla latte',
+    parts: { espresso: 1, milk: 3, foam: 1, syrup: 1 },
+    blurb: 'A latte (1:3 espresso to milk) sweetened with a part of vanilla syrup.'
+  },
+  caramel_macchiato: {
+    name: 'caramel macchiato',
+    parts: { espresso: 1, milk: 2, foam: 1, syrup: 1 },
+    blurb: 'Milk and foam first, espresso poured through, finished with caramel syrup.'
   }
 };
 
@@ -73,24 +83,36 @@ const INGREDIENTS = [
   { id: 'syrup',    name: 'Syrup',        hint: 'optional sweetness',    color: '#C89968' }
 ];
 
-// 8 customers — 5 will be drawn per shift.
+// 10 customers — 5 will be drawn per shift.
 const CUSTOMERS = [
-  { name: 'Marisol',  drink: 'latte',      bean: 'ethiopia', line: "I'd love a latte today — something fruity and bright." },
-  { name: 'Devon',    drink: 'cappuccino', bean: 'brazil',   line: "A cappuccino, please. Make it nutty and smooth." },
-  { name: 'Ahmet',    drink: 'espresso',   bean: 'colombia', line: "Just an espresso. Caramel notes if you can." },
-  { name: 'Priya',    drink: 'americano',  bean: 'sumatra',  line: "Americano. Earthy and bold — wake me up." },
-  { name: 'Jules',    drink: 'macchiato',  bean: 'ethiopia', line: "Macchiato, surprise me — bright and floral." },
-  { name: 'Tomás',    drink: 'latte',      bean: 'sumatra',  line: "A latte, but make it earthy. Full-bodied." },
-  { name: 'Beatrice', drink: 'cappuccino', bean: 'colombia', line: "Cappuccino — balanced, sweet, a little cocoa." },
-  { name: 'Wren',     drink: 'americano',  bean: 'brazil',   line: "Americano. Deep, chocolatey, a little nutty." }
+  { name: 'Marisol',  drink: 'latte',             bean: 'ethiopia', line: "I'd love a latte today — something fruity and bright." },
+  { name: 'Devon',    drink: 'cappuccino',        bean: 'brazil',   line: "A cappuccino, please. Make it nutty and smooth." },
+  { name: 'Ahmet',    drink: 'espresso',          bean: 'colombia', line: "Just an espresso. Caramel notes if you can." },
+  { name: 'Priya',    drink: 'americano',         bean: 'sumatra',  line: "Americano. Earthy and bold — wake me up." },
+  { name: 'Jules',    drink: 'macchiato',         bean: 'ethiopia', line: "Macchiato, surprise me — bright and floral." },
+  { name: 'Tomás',    drink: 'latte',             bean: 'sumatra',  line: "A latte, but make it earthy. Full-bodied." },
+  { name: 'Beatrice', drink: 'cappuccino',        bean: 'colombia', line: "Cappuccino — balanced, sweet, a little cocoa." },
+  { name: 'Wren',     drink: 'americano',         bean: 'brazil',   line: "Americano. Deep, chocolatey, a little nutty." },
+  { name: 'Soraya',   drink: 'vanilla_latte',     bean: 'colombia', line: "Vanilla latte — sweet and balanced. Don't skip the syrup." },
+  { name: 'Mateo',    drink: 'caramel_macchiato', bean: 'brazil',   line: "Caramel macchiato. Chocolatey beans, layered milk, a drizzle of syrup." }
 ];
 
 const COACH_TIPS = {
   intro: "Welcome to the bar. Read the order, pick your beans, build the drink.",
-  ratioOff: "The ratio matters more than the ingredients. A latte is mostly milk — try about 1:3.",
   beanOff: "Re-read the customer's flavor cue and match it to a bean's profile.",
   perfect: "That's the bar. Keep that shape — same beans, same ratios.",
   empty: "Add at least one part of an ingredient before serving."
+};
+
+// Per-drink ratio tips — surfaced when the bean was right but the ratio was off.
+const DRINK_TIPS = {
+  espresso:          "An espresso is a single shot — 1 part espresso, nothing else. No milk, no water, no syrup.",
+  americano:         "Americano is 1 part espresso to about 2 parts hot water. The water lengthens it without changing the body.",
+  cappuccino:        "Cappuccino is equal thirds: 1 espresso, 1 steamed milk, 1 foam. The dry foam cap is the signature.",
+  latte:             "A latte is mostly milk — try 1 part espresso to 3 parts milk, with a thin foam cap on top.",
+  macchiato:         "A macchiato is espresso 'marked' with foam — about 2 parts espresso to 1 part foam. No milk.",
+  vanilla_latte:     "Vanilla latte = latte + syrup. Try 1 espresso · 3 milk · 1 foam · 1 syrup. The sweetness is part of the spec.",
+  caramel_macchiato: "Caramel macchiato layers up: 1 espresso · 2 milk · 1 foam · 1 syrup. Milk first, espresso through, syrup on top."
 };
 
 const SHIFT_LENGTH = 5;
@@ -406,7 +428,7 @@ const handleServe = () => {
   } else if (state.selectedBean !== customer.bean) {
     state.pendingCoachTip = COACH_TIPS.beanOff;
   } else {
-    state.pendingCoachTip = COACH_TIPS.ratioOff;
+    state.pendingCoachTip = DRINK_TIPS[customer.drink];
   }
 };
 
