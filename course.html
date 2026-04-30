@@ -27,7 +27,7 @@
   <main id="game">
 
     <!-- ========== SCREEN 1: ORIGIN ========== -->
-    <section class="screen active" data-screen="1" data-narrated="true">
+    <section class="screen active" data-screen="1" data-narrated="true" data-avatar="media/avatar-slide-1.mp4">
       <div class="screen-inner screen-origin">
         <div class="left-stack">
           <div class="content-block">
@@ -66,7 +66,7 @@
     </section>
 
     <!-- ========== SCREEN 2: THE SPREAD ========== -->
-    <section class="screen" data-screen="2" data-narrated="true">
+    <section class="screen" data-screen="2" data-narrated="true" data-avatar="media/avatar-slide-2.mp4">
       <div class="screen-inner screen-spread">
         <div class="content-block">
           <p class="eyebrow">Chapter two</p>
@@ -375,7 +375,16 @@
   <!-- Avatar picture-in-picture (Wren · head barista) -->
   <aside class="avatar-pip" id="avatarPip" aria-label="Head barista narration">
     <div class="avatar-pip-frame">
-      <img class="avatar-pip-img" src="media/master-barista.png" alt="Wren, head barista" />
+      <video
+        class="avatar-pip-video"
+        id="avatarPipVideo"
+        playsinline
+        preload="auto"
+        aria-label="Wren, head barista"
+      ></video>
+      <div class="avatar-pip-controls">
+        <button type="button" class="avatar-pip-pill" id="avatarPipPlay" aria-pressed="false" aria-label="Play narration">Play</button>
+      </div>
       <span class="avatar-pip-sub">Wren · head barista</span>
     </div>
   </aside>
